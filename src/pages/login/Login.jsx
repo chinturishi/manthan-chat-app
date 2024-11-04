@@ -1,13 +1,27 @@
 import "./login.css";
 import assets from "../../assets/assets";
 import { useState } from "react";
+import { signUp,login } from "../../config/firebase.config";
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Sign up");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const onSubmitHandler=(event)=>{
+    event.preventDefault();
+    if(currentState==='Sign up'){
+      signUp(userName,email,password);
+    }
+    else if(currentState==='Login'){
+      login(email,password);
+    }
+  }
+
   return (
     <div className="login">
       <img src={assets.logo_big} alt="" className="logo" />
-      <form className="login-form">
+      <form className="login-form" onSubmit={onSubmitHandler}>
         <h2>{currentState}</h2>
         {currentState === "Sign up" ? (
           <input
@@ -15,14 +29,24 @@ const Login = () => {
             placeholder="Username"
             className="form-input"
             required
+            onChange={(e) => setUserName(e.target.value)}
+            value={userName}
           />
         ) : null}
         <input
           type="email"
           placeholder="Email Address"
           className="form-input"
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
         />
-        <input type="password" placeholder="password" className="form-input" />
+        <input
+          type="password"
+          placeholder="password"
+          className="form-input"
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
         <button type="submit">
           {currentState === "Sign up" ? "Create Account" : "Login"}
         </button>
