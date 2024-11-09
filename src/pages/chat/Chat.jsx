@@ -1,7 +1,7 @@
 import LeftSidebar from "../../components/left-sidebar/LeftSidebar";
 import ChatBox from "../../components/chat-box/ChatBox";
 import RightSidebar from "../../components/right-sidebar/RightSidebar";
-import "./Chat.css";
+import "./chat.css";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 
