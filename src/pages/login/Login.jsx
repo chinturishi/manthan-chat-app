@@ -4,11 +4,13 @@ import { useState } from "react";
 import { signUp,login } from "../../config/firebase.config";
 
 const Login = () => {
-  const [currentState, setCurrentState] = useState("Sign up");
+  console.log("Login-1");
+  const [currentState, setCurrentState] = useState("Login");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const onSubmitHandler=(event)=>{
+    console.log("Login submit");
     event.preventDefault();
     if(currentState==='Sign up'){
       signUp(userName,email,password);
@@ -52,7 +54,7 @@ const Login = () => {
         </button>
         <div className="login-term">
           {" "}
-          <input type="checkbox" />
+          <input type="checkbox"  required/>
           <p>Agree to the terms of use & privacy policy</p>
         </div>
         <div className="login-forgot">

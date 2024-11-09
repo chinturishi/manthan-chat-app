@@ -4,6 +4,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -39,11 +40,11 @@ const signUp = async (username, email, password) => {
       lastSeen: Date.now(),
     });
     await setDoc(doc(db, "chats", user.uid), {
-      chatData: [],
+      chatsData: [],
     });
   } catch (e) {
     console.log(e);
-    toast.error(e.code);
+    toast.error(e.code.split("/")[1].split("-").join(" "));
   }
 };
 
@@ -52,8 +53,17 @@ const login = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (e) {
     console.log(e);
-    toast.error(e.code);
+    toast.error(e.code.split("/")[1].split("-").join(" "));
   }
 };
 
-export { signUp, login };
+const logout = async () => {
+  try {
+    await signOut(auth);
+  } catch (e) {
+    console.log(e);
+    toast.error(e.code.split("/")[1].split("-").join(" "));
+  }
+}
+
+export { signUp, login, logout, auth, db };
