@@ -1,4 +1,4 @@
-import "./Profile.css";
+import "./profile.css";
 import assets from "../../assets/assets";
 import { useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
