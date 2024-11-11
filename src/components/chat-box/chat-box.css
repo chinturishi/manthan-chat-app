@@ -88,11 +88,12 @@
 .r-msg{
     flex-direction: row-reverse;
     justify-content: start;
+    
 }
 
 .msg{
-    color: white;
-    background-color: #077EFF;
+    color: #383838;
+    background-color: #ffffff;
     padding: 8px;
     max-width: 200px;
     font-size: 11px;
@@ -103,6 +104,11 @@
 
 .r-msg .msg{
     border-radius: 8px 8px 8px 0px;
+    
+}
+
+.s-msg .msg{
+    background-color: #d8fdd2;
 }
 
 .s-msg div, .r-msg div{
