@@ -91,7 +91,7 @@
     
 }
 
-.msg{
+/* .msg{
     color: #383838;
     background-color: #ffffff;
     padding: 8px;
@@ -100,6 +100,23 @@
     font-weight: 300;
     border-radius: 8px 8px 0px 8px;
     margin-bottom: 30px;
+    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+} */
+
+.msg {
+    color: #383838;
+    background-color: #ffffff;
+    padding: 8px;
+    max-width: 200px;
+    font-size: 11px;
+    font-weight: 300;
+    border-radius: 8px 8px 0px 8px;
+    margin-bottom: 30px;
+    white-space: normal; /* Allow text to wrap */
+    overflow: hidden;
+    word-wrap: break-word; /* Break long words */
 }
 
 .r-msg .msg{

@@ -20,7 +20,6 @@ const ChatBox = () => {
     if (messagesId) {
       const unSub = onSnapshot(doc(db, "messages", messagesId), (res) => {
         setMessages(res.data().messages.reverse());
-        console.log("Messagggggggee", messages);
       });
       return () => {
         unSub();
@@ -65,6 +64,16 @@ const ChatBox = () => {
     setInput("");
   };
 
+  const convertTimeStamp = (timeStamp) => {
+    let date = timeStamp.toDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const adjustedHours = hours % 12 || 12; // Convert to 12-hour format
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes; // Add leading zero if needed
+    return `${adjustedHours}:${formattedMinutes} ${ampm}`;
+  };
+
   return chatUser ? (
     <div className="chat-box">
       <div className="chat-user">
@@ -93,7 +102,7 @@ const ChatBox = () => {
                   }
                   alt=""
                 />
-                <p>2:30 PM</p>
+                <p>{convertTimeStamp(msg.createdAt)}</p>
               </div>
             </div>
           );
