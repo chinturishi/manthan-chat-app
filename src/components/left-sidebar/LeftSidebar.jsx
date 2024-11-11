@@ -106,7 +106,7 @@ const LeftSidebar = () => {
 
   const setChat = async (item) => {
     console.log(item)
-    setMessagesId(item.messagesId);
+    setMessagesId(item.messages);
     setChatUser(item);
   };
   return (
@@ -134,7 +134,6 @@ const LeftSidebar = () => {
       </div>
       <div className="ls-list">
         <>
-          {console.log(showSearch)}
           {showSearch && user ? (
             <div className="friends add-user" onClick={addChat}>
               <img src={user.avatar} alt="" />

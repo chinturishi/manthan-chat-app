@@ -2,26 +2,25 @@ import "./chat-box.css";
 import assets from "../../assets/assets";
 import { AppContext } from "../../context/AppContext";
 import { useContext, useEffect, useState } from "react";
-import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../config/firebase.config";
 import { toast } from "react-toastify";
 
 const ChatBox = () => {
-  const {
-    userData,
-    chatData,
-    chatUser,
-    setChatUser,
-    setMessagesId,
-    messagesId,
-    setMessages,
-  } = useContext(AppContext);
+  const { userData, chatUser, messagesId, setMessages, messages } =
+    useContext(AppContext);
   const [input, setInput] = useState("");
   useEffect(() => {
     if (messagesId) {
       const unSub = onSnapshot(doc(db, "messages", messagesId), (res) => {
         setMessages(res.data().messages.reverse());
-        console.log(res.data().messages.reverse());
+        console.log("Messagggggggee", messages);
       });
       return () => {
         unSub();
@@ -30,7 +29,7 @@ const ChatBox = () => {
   }, [messagesId]);
 
   const sendMessage = async () => {
-    console.log('send message');
+    console.log("send message");
     try {
       if (input && messagesId) {
         await updateDoc(doc(db, "messages", messagesId), {
@@ -40,25 +39,30 @@ const ChatBox = () => {
             createdAt: new Date(),
           }),
         });
-        const userIds=[chatUser.rId,userData.id];
-        userIds.forEach(async (id)=>{
-          const userChatsRef=doc(db, "chats", id);
-          const userChatsSnapshot=await getDoc(userChatsRef);
-          if(userChatsSnapshot.exists()){
-            const userChatData=userChatsSnapshot.data();
-            const chatIndex=userChatData.chatsData.findIndex((c)=>c.messagesId===messagesId);
-            userChatData.chatsData[chatIndex].lastMessage=input.slice(0,30);
-            userChatData.chatsData[chatIndex].updatedAt=Date.now();
-            if(userChatData.chatsData[chatIndex].rId===userData.id){
-              userChatData.chatsData[chatIndex].messageSee=false;
+        const userIds = [chatUser.rid, userData.id];
+        userIds.forEach(async (id) => {
+          const userChatsRef = doc(db, "chats", id);
+          const userChatsSnapshot = await getDoc(userChatsRef);
+          if (userChatsSnapshot.exists()) {
+            const userChatData = userChatsSnapshot.data();
+            const chatIndex = userChatData.chatsData.findIndex(
+              (c) => c.messages === messagesId
+            );
+            userChatData.chatsData[chatIndex].lastMessage = input.slice(0, 30);
+            userChatData.chatsData[chatIndex].updatedAt = Date.now();
+            if (userChatData.chatsData[chatIndex].rId === userData.id) {
+              userChatData.chatsData[chatIndex].messageSee = false;
             }
-            await updateDoc(userChatsRef,{chatData: userChatData.chatsData});
+            await updateDoc(userChatsRef, {
+              chatsData: userChatData.chatsData,
+            });
           }
-        })
+        });
       }
     } catch (e) {
       toast.error(e.message);
     }
+    setInput("");
   };
 
   return chatUser ? (
@@ -73,27 +77,27 @@ const ChatBox = () => {
       </div>
 
       <div className="chat-msg">
-        <div className="s-msg">
-          <p className="msg">Hi How are you</p>
-          <div>
-            <img src={assets.profile_img} alt="" />
-            <p>2:30 PM</p>
-          </div>
-        </div>
-        <div className="s-msg">
-          <img src={assets.pic1} alt="" className="msg-img" />
-          <div>
-            <img src={assets.profile_img} alt="" />
-            <p>2:30 PM</p>
-          </div>
-        </div>
-        <div className="r-msg">
-          <p className="msg">I am fine</p>
-          <div>
-            <img src={assets.profile_img} alt="" />
-            <p>2:30 PM</p>
-          </div>
-        </div>
+        {messages.map((msg, index) => {
+          return (
+            <div
+              className={msg.sId === userData.id ? "s-msg" : "r-msg"}
+              key={index}
+            >
+              <p className="msg">{msg.text}</p>
+              <div>
+                <img
+                  src={
+                    msg.sId === userData.id
+                      ? userData.avatar
+                      : chatUser.userData.avatar
+                  }
+                  alt=""
+                />
+                <p>2:30 PM</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="chat-input">
@@ -107,7 +111,7 @@ const ChatBox = () => {
         <label htmlFor="image">
           <img src={assets.gallery_icon} alt="" />
         </label>
-        <img src={assets.send_button} alt=""  onClick={sendMessage}/>
+        <img src={assets.send_button} alt="" onClick={sendMessage} />
       </div>
     </div>
   ) : (
