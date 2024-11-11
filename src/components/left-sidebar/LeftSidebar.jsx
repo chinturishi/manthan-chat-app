@@ -37,7 +37,12 @@ const LeftSidebar = () => {
       if (input) {
         setShowSearch(true);
         const userRef = collection(db, "users");
-        const q = query(userRef, where("username", "==", input.toLowerCase()));
+        //const q = query(userRef, where("username", "==", input.toLowerCase()));
+        const q = query(
+          userRef,
+          where("username", ">=", input.toLowerCase()),
+          where("username", "<=", input.toLowerCase() + "\uf8ff")
+        );
         const querySnapshot = await getDocs(q);
         console.log("chat data");
         //console.log(userData.id);
