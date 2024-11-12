@@ -2,7 +2,7 @@ import './right-sidebar.css'
 import assets from '../../assets/assets'
 import { logout } from '../../config/firebase.config'
 import { AppContext } from "../../context/AppContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const RightSidebar = () => {
   const {
@@ -12,29 +12,46 @@ const RightSidebar = () => {
     setChatUser,
     setMessagesId,
     messagesId,
+    messages
   } = useContext(AppContext);
-  return (
+
+  const [msgImages,setMsgImages]=useState([]);
+
+  useEffect(()=>{
+    let temVar = [];
+    console.log('Messssssssssssssss',messages);
+    messages.forEach((msg)=>{
+      if(msg.image){
+        temVar.push(msg.image);
+        console.log(msg.image)
+      }
+    })
+    setMsgImages(temVar);
+    console.log(msgImages);
+  },[messages])
+
+  return chatUser ?(
     <div className='rs'>
       <div className="rs-profile">
-        <img src={userData.avatar} alt="" />
-        <h3>{userData.name} <img src={assets.green_dot} className='dot'/></h3>
-        <p>Hey, There I am Rishi using the Manthan app</p>
+        <img src={chatUser.userData.avatar} alt="" />
+        <h3>{chatUser.userData.name} <img src={assets.green_dot} className='dot'/></h3>
+        <p>{chatUser.userData.bio}</p>
       </div>
       <hr />
       <div className="rs-media">
         <p>Media</p>
         <div>
-          <img src={assets.pic1} alt="" />
-          <img src={assets.pic2} alt="" />
-          <img src={assets.pic3} alt="" />
-          <img src={assets.pic4} alt="" />
-          <img src={assets.pic1} alt="" />
-          <img src={assets.pic2} alt="" />
+          {msgImages.map((url,index)=>{
+            return (<img src={url} alt=""  key={index} onClick={()=>window.open(url)}/>)
+          })}
         </div>
       </div>
       <button onClick={()=>logout()}>Logout</button>
     </div>
-  )
+  ):<div className='rs'>
+     <button onClick={()=>logout()}>Logout</button>
+    </div>
+
 }
 
 export default RightSidebar

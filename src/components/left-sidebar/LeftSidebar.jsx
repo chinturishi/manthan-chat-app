@@ -91,7 +91,7 @@ const LeftSidebar = () => {
           lastMessage: "",
           rid: userData.id,
           updatedAt: Date.now(),
-          messageSeen: true,
+          messageSeen: false,
         }),
       });
 
@@ -101,7 +101,7 @@ const LeftSidebar = () => {
           lastMessage: "",
           rid: user.id,
           updatedAt: Date.now(),
-          messageSeen: true,
+          messageSeen: false,
         }),
       });
     } catch (e) {
@@ -146,7 +146,7 @@ const LeftSidebar = () => {
             </div>
           ) : (
             chatData.map((item, index) => (
-              <div className="friends" key={index} onClick={()=>setChat(item)}>
+              <div className={`friends ${item.messageSeen || item.messages ? "":'border'}`} key={index} onClick={()=>setChat(item)}>
                 <img src={item.userData.avatar} alt="" />
                 <div>
                   <p>{item.userData.name}</p>
